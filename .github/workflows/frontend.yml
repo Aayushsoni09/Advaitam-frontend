@@ -19,7 +19,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20.19.0
+          node-version: 22
 
       - name: Install dependencies
         working-directory: frontend
@@ -36,6 +36,7 @@ jobs:
           aws-region: ap-south-1
 
       - name: Upload to S3
+        working-directory: frontend
         run: |
           aws s3 sync dist/ s3://advaitam-frontend-assets --delete
 
