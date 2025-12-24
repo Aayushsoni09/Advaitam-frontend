@@ -40,8 +40,16 @@ jobs:
         run: |
           aws s3 sync dist/ s3://advaitam-frontend-assets --delete
 
-      - name: Invalidate CloudFront
+      - name: Get CloudFront Distribution ID
+        id: cf
+        run: |
+          DIST_ID=$(aws cloudfront list-distributions \
+            --query "DistributionList.Items[?Aliases.Items && contains(Aliases.Items, '${{ secrets.DOMAIN_NAME }}')].Id | [0]" \
+            --output text)
+          echo "DISTRIBUTION_ID=$DIST_ID" >> $GITHUB_ENV
+
+      - name: Invalidate CloudFront cache
         run: |
           aws cloudfront create-invalidation \
-            --distribution-id E2XLEFZ4H4UC74 \
+            --distribution-id $DISTRIBUTION_ID \
             --paths "/*"
