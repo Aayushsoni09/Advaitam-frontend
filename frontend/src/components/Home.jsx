@@ -3,9 +3,21 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import ProductCard from './ProductCard';
+import SearchBar from "../components/SearchBar";
 import api from '../api/client';
+
 const Home = () => {
+    const defaultProducts = [
+      {
+        productId: "default-1",
+        title: "Sample Product",
+        category: "General",
+        imageUrl: "https://via.placeholder.com/300x300?text=Sample+Product",
+        price: 999
+      }
+    ];
     const [products, setProducts] = useState([]);
+    const [search, setSearch] = useState("");
       const [error, setError] = useState(null);
       const navigate = useNavigate();
       const { cart } = useCart();
@@ -19,6 +31,17 @@ const Home = () => {
             setError('Failed to load products');
           });
       }, []);
+
+  const filteredProducts = Array.isArray(products)
+    ? products.filter((product) =>
+        product.title.toLowerCase().includes(search.toLowerCase())
+      )
+    : [];
+
+    const safeProducts =
+      Array.isArray(products) && products.length > 0
+        ? products
+        : defaultProducts;
 
     return (
         <>
@@ -71,12 +94,16 @@ const Home = () => {
                   {error && (
                     <p className="text-center text-red-500 mb-6">{error}</p>
                   )}
+              <SearchBar value={search} onChange={setSearch} />
 
                   {/* Product Grid */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                            {products.map((product) => (
-                              <ProductCard key={product.id} product={product} />
-                            ))}
+                                 {safeProducts.map((product) => (
+                                   <ProductCard
+                                     key={product.productId}
+                                     product={product}
+                                   />
+                                 ))}
                           </div>
                 </main>
               </div>
