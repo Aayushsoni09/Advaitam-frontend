@@ -12,7 +12,7 @@ const Home = () => {
 
       useEffect(() => {
         api
-          .get('/products')
+          .get('/api/products')
           .then((res) => setProducts(res.data))
           .catch((err) => {
             console.error(err);
