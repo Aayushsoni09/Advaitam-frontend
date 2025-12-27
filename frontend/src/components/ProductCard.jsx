@@ -6,38 +6,45 @@ const ProductCard = ({ product }) => {
 
   return (
     <div
-                    key={product.id}
-                    className="bg-white rounded-xl shadow-sm hover:shadow-md transition p-4"
-                  >
-                    <img
-                      src={product.images?.[0]}
-                      alt={product.title}
-                      className="h-48 w-full object-cover rounded-lg mb-4"
-                      onError={(e) => {
-                        e.target.src =
-                          "https://via.placeholder.com/300x300?text=No+Image";
-                      }}
-                    />
+          key={product.productId}
+          className="bg-white rounded-xl shadow-sm hover:shadow-md transition p-4"
+        >
+          {/* Product Image */}
+          <img
+            src={product.imageUrl}
+            alt={product.title}
+            className="h-48 w-full object-cover rounded-lg mb-4"
+            onError={(e) => {
+              e.target.src =
+                "https://via.placeholder.com/300x300?text=No+Image";
+            }}
+          />
 
-                    <h3 className="text-sm font-semibold text-gray-900 line-clamp-2">
-                      {product.title}
-                    </h3>
+          {/* Title */}
+          <h3 className="text-sm font-semibold text-gray-900 line-clamp-2">
+            {product.title}
+          </h3>
 
-                    <p className="text-xs text-gray-500 mt-1">
-                      {product.category?.name}
-                    </p>
+          {/* Category */}
+          <p className="text-xs text-gray-500 mt-1">
+            {product.category}
+          </p>
 
-                    <div className="flex justify-between items-center mt-4">
-                      <span className="text-lg font-bold text-indigo-600">
-                        ₹{product.price}
-                      </span>
+          {/* Footer */}
+          <div className="flex justify-between items-center mt-4">
+            {/* Placeholder price (if not available yet) */}
+            <span className="text-lg font-bold text-indigo-600">
+              ₹{product.price ?? 991}
+            </span>
 
-                      <button onClick={() => addToCart(product)}
-                      className="px-3 py-1 text-sm bg-zinc-600 text-white rounded-lg hover:bg-zinc-700 transition">
-                        Add to Cart
-                      </button>
-                    </div>
-                  </div>
+            <button
+              className="px-3 py-1 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
+              onClick={() => addToCart(product)}
+            >
+              Add to Cart
+            </button>
+          </div>
+        </div>
   );
 };
 
